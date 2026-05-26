@@ -1,0 +1,780 @@
+/*
+구조체는 하나 이상의 변수(포인터 변수, 배열 포함)를 하나로 묶을 수 있는 복합 자료형으로, 다양한 형태의 데이터를 처리할 때 사용합니다.
+이는 기본 자료형 변수를 묶어서 새로운 자료형을 만든 것이기 때문에 '사용자 정의 자료형'이라고 합니다.
+C언어에서 구조체는 struct 키워드를 사용하여 다음과 같이 정의합니다
+
+struct 구조체이름
+{
+    멤버변수1자료형 멤버변수1이름;
+    멤버변수2자료형 멤버변수2이름;
+    ...
+};
+
+구조체는 다음과 같이 구조체 변수로 선언하여 사용할 수 있습니다.
+struct 구조체이름 구조체변수이름;
+
+struct student student1;
+
+struct student
+{
+    int number;
+    char name[20];
+    char major[20];
+    double grade;
+}student1;
+
+구조체 멤버에 접근하는 방법은 다음과 같습니다. 변수로 선언한 구조체의 멤버에 접근할 때는 . (점)(멤버 연산자)을 사용합니다.
+구조체변수이름.구조체멤버이름
+
+#include <stdio.h>
+#include <string.h>
+ 
+struct student
+{
+    int number;
+    char name[20];
+    char major[20];
+    double grade;
+};
+ 
+int main(void)
+{
+    struct student student1;
+ 
+    // .(점)으로 구조체 멤버에 접근하여 값 할당
+    student1.number = 21012345;
+    strcpy(student1.name, "김세종");
+    strcpy(student1.major, "컴퓨터공학과");
+    student1.grade = 3.5;
+ 
+    // .(점)으로 구조체 멤버에 접근하여 값 출력
+    printf("학번 : %d\n", student1.number);
+    printf("이름 : %s\n", student1.name);
+    printf("전공 : %s\n", student1.major);
+    printf("학점 : %.2f\n", student1.grade);
+ 
+    return 0;
+}
+
+실행결과
+학번 : 21012345
+이름 : 김세종
+전공 : 컴퓨터공학과
+학점 : 3.50
+
+name과 major는 배열이기 때문에 문자열 저장을 위해 strcpy 함수를 사용합니다. strcpy(저장될 배열명, 저장할 문자열)
+26행에서 %lf로 실수를 출력하면 소수점 이하 6자리까지 출력됩니다. 소수점의 자릿수를 바꾸려면 %와 lf사이에 소수점을 찍고 자릿수를 지정합니다.
+
+조체 변수도 선언과 동시에 초기화가 가능합니다.
+구조체 변수를 선언하는 동시에 값을 초기화하려면 { } (중괄호) 안에 .(점)(멤버 연산자)과 멤버 이름을 적고 값을 할당합니다.
+이 방법을 사용하면 원하는 멤버 변수만을 초기화할 수 있습니다. 멤버 변수가 정의된 순서와 초기화 순서는 상관없으며, 초기화하지 않은 멤버 변수는 0으로 초기화됩니다.
+
+struct 구조체이름 구조체변수이름 = { .멤버이름1 = 값1, .멤버이름2 = 값2 ... }
+1
+struct student student1 = { .학번 = 21012345, .이름 = "김세종", .전공 = "컴퓨터공학과", .학점 = 3.5 };
+
+멤버 이름과 할당 연산자 없이 값만 , (콤마)로 구분하여 나열해도 됩니다. 단, 이 때는 구조체 멤버가 선언된 순서대로 넣고, 각 멤버의 자료형에 맞게 넣습니다.
+즉, 처음부터 순서대로 값을 채워 넣어야 하며 중간에 있는 멤버만 값을 할당하거나, 중간에 있는 멤버만 생략할 수는 없습니다.
+
+struct 구조체이름 구조체변수이름 = { 값1, 값2 ... }
+1
+struct student student1 = { 21012345, "김세종", "컴퓨터공학과", 3.5 };
+
+
+
+구조체와 배열
+일반 변수에 배열이 있듯이 구조체에도 배열이 있습니다. 여러 정보를 저장하기 위해서는 다수의 구조체 변수를 선언해야 합니다.
+구조체 배열은 변수 이름 뒤에 [ ] (대괄호)를 붙인 뒤 크기를 설정합니다.
+
+struct 구조체이름 변수이름[크기];
+ 
+
+다음 예제는 구조체 배열의 선언 및 초기화를 보여주는 예제입니다.
+구조체 배열에서 각 요소에 접근하려면 배열 뒤에 대괄호를 사용하며 대괄호 안에 인덱스를 지정해줍니다. 여기서 멤버에 접근하려면 . (점)(멤버 연산자)을 사용합니다.
+
+ 	
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+#include <stdio.h>
+#include <string.h>
+ 
+struct student
+{
+    int number;
+    char name[20];
+    char major[20];
+    double grade;
+};
+ 
+int main(void)
+{
+    struct student arr[3];    // 크기가 3인 구조체 배열 생성
+    int i;
+ 
+    // 인덱스로 요소에 접근한 뒤 .(점)으로 멤버에 접근
+    arr[0].number = 21012345;
+    strcpy(arr[0].name, "김세종");
+    strcpy(arr[0].major, "컴퓨터공학과");
+    arr[0].grade = 3.5;
+ 
+    arr[1].number = 21012346;
+    strcpy(arr[1].name, "이세종");
+    strcpy(arr[1].major, "소프트웨어학과");
+    arr[1].grade = 2.5;
+ 
+    arr[2].number = 21012347;
+    strcpy(arr[2].name, "박세종");
+    strcpy(arr[2].major, "데이터사이언스학과");
+    arr[2].grade = 4.5;
+ 
+    for (i = 0; i < 3; i++)
+    {
+        printf("학번 : %d\n", arr[i].number);
+        printf("이름 : %s\n", arr[i].name);
+        printf("전공 : %s\n", arr[i].major);
+        printf("학점 : %.2f\n", arr[i].grade);
+        printf("\n");
+    }
+ 
+    return 0;
+}
+ 
+실행결과
+학번 : 21012345
+이름 : 김세종
+전공 : 컴퓨터공학과
+학점 : 3.50
+
+학번 : 21012346
+이름 : 이세종
+전공 : 소프트웨어학과
+학점 : 2.50
+
+학번 : 21012347
+이름 : 박세종
+전공 : 데이터사이언스학과
+학점 : 4.50
+
+
+구조체 배열을 선언하면서 초기화하려면 { } (중괄호)안에 { } 중괄호를 사용합니다.
+
+struct 구조체이름 변수이름[크기] = { { .멤버이름1 = 값1, .멤버이름2 = 값2 ...},
+                                     { .멤버이름1 = 값3, .멤버이름2 = 값4 ...}
+                                   ... };
+1
+2
+3
+struct student arr[3] = { { .학번 = 21012345, .이름 = "김세종", .전공 = "컴퓨터공학과", .학점 = 3.5 },
+                          { .학번 = 21012346, .이름 = "이세종", .전공 = "소프트웨어학과", .학점 = 2.5 },
+                          { .학번 = 21012347, .이름 = "박세종", .전공 = "데이터사이언스학과", .학점 = 4.5 } }
+ 
+
+struct 구조체이름 변수이름[크기] = { { 값1, 값2 ... }, { 값3, 값4 ... }, ... };
+1
+2
+3
+struct student arr[3] = { { 21012345, "김세종", "컴퓨터공학과", 3.5 },
+                          { 21012346, "이세종", "소프트웨어학과", 2.5 },
+                          { 21012347, "박세종", "데이터사이언스학과", 4.5 } }
+
+
+구조체와 포인터
+포인터는 메모리의 주소값을 저장하는 변수입니다. 구조체 포인터도 마찬가지입니다.
+구조체를 가리키는 포인터를 구조체 포인터라고 합니다.
+구조체 포인터 변수도 일반 포인터 변수와 동일하게 변수이름 앞에 *를 붙여 선언합니다.
+
+struct 구조체이름 * 구조체포인터;
+구조체 포인터를 이용하여 구조체의 멤버에 접근하는 방법에는 다음과 같이 두 가지 방법이 있습니다.
+아래의 두 가지 방법은 완전히 같으며, 일반적으로 ->(화살표 연산자)가 좀 더 많이 사용됩니다.
+
+ 	1. *(참조 연산자)를 이용하는 방법
+2. ->(화살표 연산자)를 이용하는 방법
+1. *(참조 연산자)를 이용하는 방법은 다음과 같습니다.
+
+(*구조체포인터).멤버변수이름
+ *(참조 연산자)는 .(멤버 연산자)보다 연산자 우선순위가 낮으므로 반드시 ( ) (괄호)를 사용합니다.
+
+ 
+
+2. ->(화살표 연산자)를 이용하는 방법은 다음과 같습니다.
+
+구조체포인터 -> 멤버변수이름
+예제를 통해 구조체 포인터의 사용법을 살펴보겠습니다. 아래 두 가지 방법은 같은 동작을 하며, 실행결과도 같습니다.
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+#include <stdio.h>
+ 
+struct student
+{
+    int number;
+    char name[20];
+    char major[20];
+    double grade;
+};
+ 
+int main(void)
+{
+    struct student student1 = { 21012345, "김세종", "컴퓨터공학과", 3.5 };
+    struct student * ptr = &student1;
+ 
+    printf("학번 : %d\n", (*ptr).number);
+    printf("이름 : %s\n", (*ptr).name);
+    printf("전공 : %s\n", (*ptr).major);
+    printf("학점 : %.2f\n", (*ptr).grade);
+ 
+    return 0;
+}
+실행결과
+학번 : 21012345
+이름 : 김세종
+전공 : 컴퓨터공학과
+학점 : 3.50
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+#include <stdio.h>
+ 
+struct student
+{
+    int number;
+    char name[20];
+    char major[20];
+    double grade;
+};
+ 
+int main(void)
+{
+    struct student student1 = { 21012345, "김세종", "컴퓨터공학과", 3.5};
+    struct student * ptr = &student1;
+ 
+    printf("학번 : %d\n", ptr -> number);
+    printf("이름 : %s\n", ptr -> name);
+    printf("전공 : %s\n", ptr -> major);
+    printf("학점 : %.2f\n", ptr -> grade);
+ 
+    return 0;
+}
+실행결과
+학번 : 21012345
+이름 : 김세종
+전공 : 컴퓨터공학과
+학점 : 3.50
+	
+student형 포인터 변수 ptr이 구조체 변수 student1을 가리킵니다.
+
+ 
+
+student형 포인터 변수 ptr을 이용해 다음과 같이 구조체 변수 student1에 접근합니다.
+
+ 	(*ptr).number	ptr -> number
+ 	(*ptr).name	ptr -> name
+ 	(*ptr).major	ptr -> major
+ 	(*ptr).grade	ptr -> grade
+
+
+
+
+typedef
+typedef 선언은 기존에 존재하는 자료형의 이름에 새 이름을 부여합니다.
+typedef 선언을 사용하여 이미 정의된 형식이나 사용자가 선언한 형식에 대한 보다 짧거나 의미 있는 이름을 생성할 수 있습니다.
+
+typedef는 기본적으로 아래와 같이 작성합니다. 새롭게 선언할 자료형은 가장 마지막에 있는 단어를 중심으로 이루어집니다.
+
+typedef 기존_자료형 새롭게_선언할_자료형;
+ 
+
+아래와 같이 작성하면 unsigned int의 별칭으로서 myint라는 자료형이 새롭게 구현됩니다.
+
+1
+typedef unsigned int myint;
+ 
+
+위의 typedef 코드를 작성했다면 이렇게 작성할 수 있습니다.
+
+1
+2
+3
+unsigned int num;
+// 위 코드와 아래 코드는 같은 의미입니다.
+myint num;
+typedef를 이용하면 구조체 변수를 만들 때 struct 선언을 생략할 수 있습니다. typedef로 구조체를 정의하면서 별칭을 지정해주면 됩니다.
+
+다음과 같이 구조체가 정의되어있으면
+
+1
+2
+3
+4
+5
+6
+7
+struct student
+{
+    int number;
+    char name[20];
+    char major[20];
+    double grade;
+};
+ 
+
+다음과 같이 구조체 변수를 선언과 초기화 해야 합니다.
+
+1
+struct student student1; = { 21012345, "김세종", "컴퓨터공학과", 3.5 };
+ 
+
+typedef 선언을 통해 struct student를 대신할 수 있도록 Student라는 이름을 정의할 수 있습니다.
+
+1
+typedef struct student Student;    // struct student에 Student라는 이름 부여
+ 
+
+이후로는 다음과 같이 struct 선언을 생략하고 구조체 변수 선언과 초기화를 할 수 있습니다.
+
+1
+Student student1 = { 21012345, "김세종", "컴퓨터공학과", 3.5 };
+typedef로 구조체를 정의하면서 별칭을 지정할 수도 있습니다.
+
+typedef struct 구조체이름
+{
+    멤버변수1자료형 멤버변수1이름;
+    멤버변수2자료형 멤버변수2이름;
+    멤버변수3자료형 멤버변수3이름;
+    ...
+} 구조체별칭;
+ 
+
+오른쪽의 선언은 왼쪽의 정의와 선언을 묶은 것입니다. 다음과 같이 구조체의 정의와 typedef 선언을 묶을 수 있습니다.
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+struct student
+{
+    int number;
+    char name[20];
+    char major[20];
+    double grade;
+}
+ 
+typedef struct student Student;
+
+
+1
+2
+3
+4
+5
+6
+7
+typedef struct student
+{
+    int number;
+    char name[20];
+    char major[20];
+    double grade;
+} Student;
+구조체 이름을 생략하는 방법도 있습니다. 단, 오른쪽과 같이 구조체의 이름을 생략하면 struct 선언을 추가하면서 변수를 선언할 수 없습니다.
+
+1
+2
+3
+4
+5
+6
+7
+typedef struct student
+{
+    int number;
+    char name[20];
+    char major[20];
+    double grade;
+} Student;
+	
+1
+2
+3
+4
+5
+6
+7
+typedef struct
+{
+    int number;
+    char name[20];
+    char major[20];
+    double grade;
+} Student;
+단, 오른쪽과 같이 구조체의 이름을 생략하면 struct 선언을 추가하면서 변수를 선언할 수 없습니다.
+
+1
+2
+Student student1;    // 가능한 선언
+struct student student1;    // 불가능한 선언
+
+
+
+공용체
+공용체는 union 키워드를 사용하여 선언하며, 구조체와 비슷합니다. 모든 멤버 변수가 하나의 메모리 공간을 '공유'한다는 점만이 다릅니다.
+모든 멤버 변수가 같은 메모리를 공유하므로, 공용체는 한 번에 하나의 멤버 변수만 사용할 수 있습니다.
+
+공용체를 정의하는 방법은 키워드 struct 대신 union을 사용하는 것입니다.
+
+union 공용체이름
+{
+    멤버변수1자료형 멤버변수1이름;
+    멤버변수2자료형 멤버변수2이름;
+    ...
+};
+구조체와 공용체의 차이를 보면 공용체를 쉽게 이해할 수 있습니다.
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+#include <stdio.h>
+ 
+typedef struct snum    // 구조체 선언
+{
+    int a;
+    int b;
+    double c;
+} Snum;
+ 
+typedef union unum    // 공용체 선언
+{
+    int a;
+    int b;
+    double c;
+} Unum;
+ 
+int main(void)
+{
+    Snum sn;
+    Unum un;
+    printf("%p %p %p\n", &sn.a, &sn.b, &sn.c);
+    printf("%p %p %p\n", &un.a, &un.b, &un.c);
+    printf("%d %d\n", sizeof(Snum), sizeof(Unum));
+ 
+    return 0;
+}
+ 
+
+
+
+ 	실행결과
+00DBFE50 00DBFE54 00DBFE58
+00DBFE40 00DBFE40 00DBFE40
+16 8
+ 
+Snum형 변수를 구성하는 멤버들의 주소값은 다른데 Unum형 변수를 구성하는 멤버들의 주소값은 동일하다는 것을 볼 수 있습니다.
+sizeof 연산자로 자료형의 크기를 구하면 16과 8이 출력됩니다. int는 4바이트, double은 8바이트입니다.
+여기서 16은 모든 멤버 크기를 합한 결과 16이고, 8은 멤버 중에서 가장 크기가 큰 double의 크기만 계산된 결과입니다.
+
+ 	
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+#include <stdio.h>
+ 
+typedef union unum    // 공용체 선언
+{
+    int a;
+    int b;
+    double c;
+} Unum;
+ 
+int main(void)
+{
+    Unum un;    // 8바이트 메모리 할당
+ 
+    un.a = 10;
+    printf("%d\n", un.b);    // b 멤버 출력
+ 
+    un.c = 11.1;    // c 멤버에 값 대입
+    printf("%d\n", un.a);    // a 멤버 출력
+    printf("%d\n", un.b);    // b 멤버 출력
+    printf("%f\n", un.c);    // c 멤버 출력
+ 
+    return 0;
+}
+실행결과
+10
+858993459
+858993459
+11.100000
+출력 결과로 알 수 있듯이 처음에 a(상위 4바이트의 메모리 공간)에 10을 저장했습니다.
+b는 int형 변수이므로 b 멤버에 접근할 경우 상위 4바이트의 공간을 참조하게 됩니다. 그런데 앞서 이 공간에 10을 저장했으므로 10이 출력됩니다.
+17행에서 c에 실수를 저장함으로써 결과적으로 상위 4바이트에 저장된 값을 덮어써버립니다.
+실수를 저장하면서 덮어써버렸기 때문에, a, b(상위 4바이트)를 읽어서 출력하면 알 수 없는 값이 출력됩니다.
+
+
+
+다음은 구조체와 공용체를 비교한 표입니다.
+
+        	 구조체(struct)	                                                  공용체(union)
+메모리   	 구조체의 각각의 멤버들은 모두 다른 메모리를 갖습니다.                공용체의 모든 멤버들은 모두 같은 메모리를 공유합니다.
+           따라서 각각 메모리의 시작 주소가 다릅니다.	                        따라서 각각의 멤버들은 시작 주소가 모두 동일합니다.
+초기화   	 구조체 멤버들을 한 번에 초기화할 수 있습니다.	                      공용체의 초기화는 첫 번째 멤버에서만 초기화를 할 수 있습니다. 첫번째 멤버가 아닌 멤버를 초기화할 때는 .(멤버 접근 연산자)로멤버를 직접 지정해야 합니다.
+전체 크기	 모든 구조체 멤버 크기의 합입니다.	                                  가장 큰 멤버의 크기입니다.
+접근	     구조체의 모든 멤버에 접근할 수 있습니다.	                          하나의 멤버에만 접근할 수 있습니다.
+
+
+열거형
+열거형은 enum 키워드를 사용하여 선언합니다. enumeration의 약자로서, 열거한다는 의미를 가집니다.
+예로, 요일을 저장하는 변수는 [월요일, 화요일, 수요일, 목요일, 금요일, 토요일, 일요일] 중의 하나의 값만 가질 수 있습니다.
+
+열거형을 정의하는 방법은 다음과 같습니다. 초기화를 하지 않으면 열거된 순서에 따라 0부터 차례대로 증가합니다.
+
+enum 열거형이름
+{
+    상수명1, 상수명2, ...
+};
+ 
+
+예를 들어 요일을 만든다고 하면 요일을 열거형으로 정의할 수 있습니다.
+
+1
+2
+3
+4
+enum days_of_week
+{
+    mon, tue, wed, thu, fri, sat, sun    // 열거형 선언
+};
+ 
+위와 같은 형태이면 mon는 0,  tue는 1, wed는 2, thu는 3, fri는 4, sat는 5, sun는 6
+
+1
+2
+3
+4
+enum days_of_week
+{
+    mon=3, tue, wed, thu=50, fri, sat, sun    // 열거형 선언
+};
+ 
+위와 같은 형태이면 mon는 3,  tue는 4, wed는 5, thu는 50, fri는 51, sat는 52, sun는 53
+
+이렇게 정의된 열거형은 다음과 같이 열거형 변수로 선언하여 사용할 수 있습니다.
+열거형 변수는 int형과 같은 크기로 정수를 저장할 수 있는 공간이 할당됩니다. 또한 열거형 멤버를 저장하는 용도로 쓰입니다.
+
+enum 열거형이름 열거형변수이름;
+1
+enum days_of_week day;    // 열거형 변수 선언
+다음 예제는 열거형의 사용을 보여주는 예제입니다
+
+ 	
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+#include <stdio.h>
+ 
+enum days_of_week
+{
+    mon, tue, wed, thu, fri, sat, sun    // 열거형 선언
+};
+ 
+int main(void)
+{
+    enum days_of_week day;    // 열거형 변수 선언
+ 
+    day = fri;    // 열거 멤버의 값 대입
+ 
+    switch (day)    // 열거 멤버 판단
+    {
+    case mon:
+        printf("Hate Monday\n"); break;
+    case tue:
+        printf("Annoy Tuesday\n"); break;
+    case wed:
+        printf("Ignore Wednesday\n"); break;
+    case thu:
+        printf("Smile Thursday\n"); break;
+    case fri:
+        printf("Love Friday\n"); break;
+    case sat:
+        printf("Enjoy Saturday\n"); break;
+    case sun:
+        printf("Lazy Sunday\n"); break;
+    }
+ 
+    return 0;
+}
+왼쪽 예제의 case 레이블에서 사용한 상수 mon, tue, wed... 를 대신해서
+0, 1, 2...를 삽입해도 결과는 동일합니다.
+
+mon, tue, wed... 같은 열거형 상수는 int형으로 표현되는 상수이기 때문입니다.
+
+열거형 멤버는 사실 정수 상수를 써서 작성할 수 있습니다.
+
+그러나 열거형을 정의하면 요일 이름을 직접 사용할 수 있으므로
+훨씬 읽기 쉬운 코드를 만들 수 있습니다.
+
+ 
+
+ 
+
+실행결과
+Love Friday
+ struct와 마찬가지로, typedef를 사용하여 enum 키워드를 생략할 수 있습니다.
+*/
